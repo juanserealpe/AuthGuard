@@ -1,10 +1,13 @@
-org/authguard/infrastructure/LuckPermsIntegration.class
-org/authguard/AuthGuard.class
+org/authguard/commands/DelSpawnCommand.class
 org/authguard/repositories/IUserRepository.class
 org/authguard/repositories/SQLiteUserRepository.class
 org/authguard/services/SessionManager.class
-org/authguard/commands/LoginCommand.class
-org/authguard/services/AuthService.class
 org/authguard/commands/RegisterCommand.class
 org/authguard/models/User.class
 org/authguard/listeners/AuthListener.class
+org/authguard/infrastructure/LuckPermsIntegration.class
+org/authguard/AuthGuard.class
+org/authguard/commands/SetSpawnCommand.class
+org/authguard/services/SpawnManager.class
+org/authguard/commands/LoginCommand.class
+org/authguard/services/AuthService.class

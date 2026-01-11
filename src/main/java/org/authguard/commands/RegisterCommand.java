@@ -11,30 +11,26 @@ import org.jetbrains.annotations.NotNull;
 public class RegisterCommand implements CommandExecutor {
 
     private final AuthService authService;
-    private final String usageMessage;
-    private final String alreadyRegisteredMessage;
     private final String successMessage;
     private final String internalErrorMessage;
+    private final String alreadyAuthenticatedMessage;
+    private final String errorConsoleCommandMessage;
 
-    public RegisterCommand(AuthService authService, String usageMessage, String alreadyRegisteredMessage,
-            String successMessage, String internalErrorMessage) {
+    public RegisterCommand(AuthService authService,
+            String successMessage, String internalErrorMessage, String alreadyAuthenticatedMessage,
+            String errorConsoleCommandMessage) {
         this.authService = authService;
-        this.usageMessage = ChatColor.translateAlternateColorCodes('&', usageMessage);
-        this.alreadyRegisteredMessage = ChatColor.translateAlternateColorCodes('&', alreadyRegisteredMessage);
         this.successMessage = ChatColor.translateAlternateColorCodes('&', successMessage);
         this.internalErrorMessage = ChatColor.translateAlternateColorCodes('&', internalErrorMessage);
+        this.alreadyAuthenticatedMessage = ChatColor.translateAlternateColorCodes('&', alreadyAuthenticatedMessage);
+        this.errorConsoleCommandMessage = ChatColor.translateAlternateColorCodes('&', errorConsoleCommandMessage);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
             @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("This command can only be used by players.");
-            return true;
-        }
-
-        if (args.length != 1) {
-            player.sendMessage(usageMessage);
+            sender.sendMessage(errorConsoleCommandMessage);
             return true;
         }
 
@@ -44,7 +40,7 @@ public class RegisterCommand implements CommandExecutor {
             if (success) {
                 player.sendMessage(successMessage);
             } else {
-                player.sendMessage(alreadyRegisteredMessage);
+                player.sendMessage(alreadyAuthenticatedMessage);
             }
         }).exceptionally(ex -> {
             player.sendMessage(internalErrorMessage);

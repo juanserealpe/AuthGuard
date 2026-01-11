@@ -1,18 +1,35 @@
-# AuthGuard Configuration
-
 database:
   file: "authguard.db"
 
-messages:
-  not-authenticated: "&cYou must login or register to interact with the server!"
-  already-registered: "&cYou are already registered! Use /login <password>."
-  registration-success: "&aSuccessfully registered! You can now play."
-  login-success: "&aSuccessfully logged in! Welcome back."
-  invalid-password: "&cInvalid password. Please try again."
-  not-registered: "&cYou are not registered! Use /register <password>."
-  usage-register: "&cUsage: /register <password>"
-  usage-login: "&cUsage: /login <password>"
-  internal-error: "&cAn internal error occurred. Please contact an administrator."
+spawn:
+  enabled: false
+  world: ""
+  x: 0.0
+  y: 0.0
+  z: 0.0
+  yaw: 0.0
+  pitch: 0.0
 
-# Rank configuration (will be synced with LuckPerms if available)
+messages:
+
+  usage-register: "&cNo estás registrado en el servidor, ingresa el comando de registro y una contraseña: /register <contraseña>."
+  registration-success: "&aTe has registrado correctamente, bienvenido!."
+  usage-login: "&cPara autenticarte ingresa el comando de login y tu contraseña: /login <contraseña>"
+  login-success: "&aTe has logueado exitosamente, disfruta tu instancia en el servidor!"
+  invalid-password: "&cContraseña inválida, intenta de nuevo."
+  invalid-input-in-login: "&cSolo puedes usar /Login <contraseña>"
+
+  not-registered-command-blocked: "&cSolo puedes usar /register <contraseña> para registrarte."
+  registered-command-blocked: "&cSolo puedes usar /login <contraseña> para autenticarte."
+
+  spawn-set-success: "&aSpawn establecido en tu ubicación actual."
+  spawn-deleted-success: "&aSpawn desactivado correctamente."
+  no-permission: "&cNo tienes permisos para ejecutar este comando."
+
+  already-authenticated: "&cYa estás autenticado en el servidor."
+  internal-error: "&cHa ocurrido un error. Por favor contacta con un Administrador."
+
+  input-console-command-error: "&cEste comando solo puede ser usado por jugadores."
+
 default-rank: "player"
+

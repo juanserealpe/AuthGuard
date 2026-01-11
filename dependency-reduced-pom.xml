@@ -50,6 +50,30 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>com.github.seeseemelk</groupId>
+      <artifactId>MockBukkit-v1.20</artifactId>
+      <version>3.78.0</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>adventure-platform-bungeecord</artifactId>
+          <groupId>net.kyori</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>byte-buddy</artifactId>
+          <groupId>net.bytebuddy</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>maven-resolver-connector-basic</artifactId>
+          <groupId>org.apache.maven.resolver</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>maven-resolver-transport-http</artifactId>
+          <groupId>org.apache.maven.resolver</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>net.luckperms</groupId>
       <artifactId>api</artifactId>
       <version>5.4</version>
@@ -82,16 +106,16 @@
       <scope>test</scope>
       <exclusions>
         <exclusion>
-          <artifactId>byte-buddy</artifactId>
-          <groupId>net.bytebuddy</groupId>
-        </exclusion>
-        <exclusion>
           <artifactId>byte-buddy-agent</artifactId>
           <groupId>net.bytebuddy</groupId>
         </exclusion>
         <exclusion>
           <artifactId>objenesis</artifactId>
           <groupId>org.objenesis</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>byte-buddy</artifactId>
+          <groupId>net.bytebuddy</groupId>
         </exclusion>
       </exclusions>
     </dependency>

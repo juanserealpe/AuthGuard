@@ -1,0 +1,45 @@
+# ========================
+# Maven / Build artifacts
+# ========================
+target/
+${project.build.directory}
+
+# ========================
+# IDEs / Editor files
+# ========================
+*.iml
+.idea/
+.vscode/
+
+# ========================
+# Logs / Temp files
+# ========================
+*.log
+output.txt
+*.tmp
+*.swp
+
+# ========================
+# Local configuration / Secrets
+# ========================
+config.yml
+*.keystore
+*.jks
+
+# ========================
+# Maven-generated files
+# ========================
+dependency-reduced-pom.xml
+*.class
+
+# ========================
+# OS files
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# Optional: other temp folders
+# ========================
+out/
+

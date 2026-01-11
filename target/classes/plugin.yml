@@ -1,8 +1,8 @@
 name: AuthGuard
 version: '1.0-SNAPSHOT'
 main: org.authguard.AuthGuard
-api-version: '1.20'
-author: JuanSe
+api-version: '1.21'
+author: TheNexoz/Juanserealpe
 description: Secure authentication and registration plugin for modern Paper servers.
 commands:
   register:
@@ -11,7 +11,19 @@ commands:
   login:
     description: Login to your account.
     usage: /login <password>
+  setspawn:
+    description: Set the spawn location for unauthenticated players.
+    usage: /setspawn
+    permission: authguard.spawn.manage
+  delspawn:
+    description: Delete the spawn location.
+    usage: /delspawn
+    permission: authguard.spawn.manage
 permissions:
   authguard.admin:
     description: Allows administrative access to AuthGuard.
     default: op
+  authguard.spawn.manage:
+    description: Allows managing spawn locations.
+    default: op
+

@@ -9,13 +9,15 @@ public class User {
     private final String passwordHash;
     private final String rank;
     private final LocalDateTime createdAt;
+    private final LocalDateTime lastConnection;
 
-    public User(UUID uuid, String username, String passwordHash, String rank, LocalDateTime createdAt) {
+    public User(UUID uuid, String username, String passwordHash, String rank, LocalDateTime createdAt, LocalDateTime lastConnection) {
         this.uuid = uuid;
         this.username = username;
         this.passwordHash = passwordHash;
         this.rank = rank;
         this.createdAt = createdAt;
+        this.lastConnection = lastConnection;
     }
 
     public UUID getUuid() {
@@ -37,4 +39,9 @@ public class User {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
+    public LocalDateTime getLastConnection(){
+        return lastConnection;
+    }
+
 }

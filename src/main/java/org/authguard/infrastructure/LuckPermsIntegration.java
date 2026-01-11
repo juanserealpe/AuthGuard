@@ -4,7 +4,6 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.node.Node;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
-
 import java.util.UUID;
 
 public class LuckPermsIntegration {
@@ -26,9 +25,7 @@ public class LuckPermsIntegration {
     }
 
     public void assignRank(UUID uuid, String rank) {
-        if (!isAvailable())
-            return;
-
+        if (!isAvailable()) return;
         luckPerms.getUserManager().modifyUser(uuid, user -> {
             Node node = Node.builder("group." + rank).build();
             user.data().add(node);

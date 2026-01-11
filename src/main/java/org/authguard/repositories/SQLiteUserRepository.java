@@ -3,7 +3,6 @@ package org.authguard.repositories;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.authguard.models.User;
-
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,26 +26,33 @@ public class SQLiteUserRepository implements IUserRepository {
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         config.setMaximumPoolSize(10);
+        config.setConnectionInitSql("PRAGMA journal_mode=WAL;");
+
 
         this.dataSource = new HikariDataSource(config);
         createTable();
     }
 
     private void createTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS users (" +
-                "uuid TEXT PRIMARY KEY," +
-                "username TEXT NOT NULL," +
-                "password_hash TEXT NOT NULL," +
-                "rank TEXT NOT NULL," +
-                "created_at TEXT NOT NULL" +
-                ");";
+        String sql = """
+        CREATE TABLE IF NOT EXISTS users (
+            uuid TEXT PRIMARY KEY,
+            username TEXT NOT NULL,
+            password_hash TEXT NOT NULL,
+            rank TEXT NOT NULL,
+            created_at TEXT NOT NULL,
+            last_login TEXT NOT NULL
+        );
+        """;
+
         try (Connection conn = dataSource.getConnection();
-                Statement stmt = conn.createStatement()) {
+             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
         } catch (SQLException e) {
             logger.severe("Could not create users table: " + e.getMessage());
         }
     }
+
 
     @Override
     public CompletableFuture<Optional<User>> findByUuid(UUID uuid) {
@@ -62,7 +68,8 @@ public class SQLiteUserRepository implements IUserRepository {
                                 rs.getString("username"),
                                 rs.getString("password_hash"),
                                 rs.getString("rank"),
-                                LocalDateTime.parse(rs.getString("created_at"), formatter)));
+                                LocalDateTime.parse(rs.getString("created_at"), formatter),
+                                LocalDateTime.parse(rs.getString("last_login"), formatter)));
                     }
                 }
             } catch (SQLException e) {
@@ -75,7 +82,11 @@ public class SQLiteUserRepository implements IUserRepository {
     @Override
     public CompletableFuture<Void> save(User user) {
         return CompletableFuture.runAsync(() -> {
-            String sql = "INSERT OR REPLACE INTO users (uuid, username, password_hash, rank, created_at) VALUES (?, ?, ?, ?, ?)";
+            String sql = """
+                INSERT OR REPLACE INTO users
+                (uuid, username, password_hash, rank, created_at, last_login)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """;
             try (Connection conn = dataSource.getConnection();
                     PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, user.getUuid().toString());
@@ -83,6 +94,7 @@ public class SQLiteUserRepository implements IUserRepository {
                 pstmt.setString(3, user.getPasswordHash());
                 pstmt.setString(4, user.getRank());
                 pstmt.setString(5, user.getCreatedAt().format(formatter));
+                pstmt.setString(6, user.getLastConnection().format(formatter));
                 pstmt.executeUpdate();
             } catch (SQLException e) {
                 logger.severe("Error saving user: " + e.getMessage());
@@ -91,18 +103,23 @@ public class SQLiteUserRepository implements IUserRepository {
     }
 
     @Override
-    public CompletableFuture<Void> delete(UUID uuid) {
+    public CompletableFuture<Void> updateLastLogin(UUID uuid) {
         return CompletableFuture.runAsync(() -> {
-            String sql = "DELETE FROM users WHERE uuid = ?";
+            String sql = "UPDATE users SET last_login = ? WHERE uuid = ?";
+
             try (Connection conn = dataSource.getConnection();
-                    PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, uuid.toString());
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                pstmt.setString(1, LocalDateTime.now().format(formatter));
+                pstmt.setString(2, uuid.toString());
                 pstmt.executeUpdate();
+
             } catch (SQLException e) {
-                logger.severe("Error deleting user: " + e.getMessage());
+                logger.severe("Error updating last connection: " + e.getMessage());
             }
         });
     }
+
 
     @Override
     public void close() {

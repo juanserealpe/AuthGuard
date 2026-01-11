@@ -11,7 +11,7 @@ public interface IUserRepository {
 
     CompletableFuture<Void> save(User user);
 
-    CompletableFuture<Void> delete(UUID uuid);
+    CompletableFuture<Void> updateLastLogin(UUID uuii);
 
     void close();
 }
