@@ -1,0 +1,5 @@
+name: authguard
+version: '1.0-SNAPSHOT'
+main: org.authguard
+api-version: '1.21'
+authors: [ thenexoz ]
