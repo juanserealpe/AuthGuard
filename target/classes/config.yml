@@ -1,0 +1,18 @@
+# AuthGuard Configuration
+
+database:
+  file: "authguard.db"
+
+messages:
+  not-authenticated: "&cYou must login or register to interact with the server!"
+  already-registered: "&cYou are already registered! Use /login <password>."
+  registration-success: "&aSuccessfully registered! You can now play."
+  login-success: "&aSuccessfully logged in! Welcome back."
+  invalid-password: "&cInvalid password. Please try again."
+  not-registered: "&cYou are not registered! Use /register <password>."
+  usage-register: "&cUsage: /register <password>"
+  usage-login: "&cUsage: /login <password>"
+  internal-error: "&cAn internal error occurred. Please contact an administrator."
+
+# Rank configuration (will be synced with LuckPerms if available)
+default-rank: "player"

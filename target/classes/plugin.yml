@@ -1,5 +1,17 @@
-name: authguard
+name: AuthGuard
 version: '1.0-SNAPSHOT'
-main: org.authguard
+main: org.authguard.AuthGuard
 api-version: '1.21'
-authors: [ thenexoz ]
+author: JuanSe
+description: Secure authentication and registration plugin for modern Paper servers.
+commands:
+  register:
+    description: Register a new account.
+    usage: /register <password>
+  login:
+    description: Login to your account.
+    usage: /login <password>
+permissions:
+  authguard.admin:
+    description: Allows administrative access to AuthGuard.
+    default: op
