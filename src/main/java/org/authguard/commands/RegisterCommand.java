@@ -15,15 +15,19 @@ public class RegisterCommand implements CommandExecutor {
     private final String internalErrorMessage;
     private final String alreadyAuthenticatedMessage;
     private final String errorConsoleCommandMessage;
+    private final String invalidPasswordMessage;
+    private final int minPasswordLength;
 
     public RegisterCommand(AuthService authService,
             String successMessage, String internalErrorMessage, String alreadyAuthenticatedMessage,
-            String errorConsoleCommandMessage) {
+            String errorConsoleCommandMessage, String invalidPasswordMessage, int minPasswordLength) {
         this.authService = authService;
         this.successMessage = ChatColor.translateAlternateColorCodes('&', successMessage);
         this.internalErrorMessage = ChatColor.translateAlternateColorCodes('&', internalErrorMessage);
         this.alreadyAuthenticatedMessage = ChatColor.translateAlternateColorCodes('&', alreadyAuthenticatedMessage);
         this.errorConsoleCommandMessage = ChatColor.translateAlternateColorCodes('&', errorConsoleCommandMessage);
+        this.invalidPasswordMessage = ChatColor.translateAlternateColorCodes('&', invalidPasswordMessage);
+        this.minPasswordLength = minPasswordLength;
     }
 
     @Override
@@ -34,7 +38,17 @@ public class RegisterCommand implements CommandExecutor {
             return true;
         }
 
+        if (args.length == 0) {
+            player.sendMessage(invalidPasswordMessage);
+            return true;
+        }
+
         String password = args[0];
+
+        if (password.length() < minPasswordLength) {
+            player.sendMessage(invalidPasswordMessage);
+            return true;
+        }
 
         authService.register(player.getUniqueId(), player.getName(), password).thenAccept(success -> {
             if (success) {

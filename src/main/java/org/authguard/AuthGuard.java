@@ -44,7 +44,9 @@ public final class AuthGuard extends JavaPlugin {
         this.spawnManager = new SpawnManager(this);
 
         String defaultRank = getConfig().getString("default-rank", "player");
-        this.authService = new AuthService(userRepository, sessionManager, luckPermsIntegration, defaultRank);
+        int bcryptCost = getConfig().getInt("security.bcrypt-cost", 12);
+        this.authService = new AuthService(userRepository, sessionManager, luckPermsIntegration, defaultRank,
+                bcryptCost);
 
         // Register listeners
         String notAuthenticatedMessage = getConfig().getString("messages.usage-login");
@@ -57,12 +59,19 @@ public final class AuthGuard extends JavaPlugin {
                 this);
 
         // Register commands
+        int minPasswordLength = getConfig().getInt("security.min-password-length", 6);
+        String passwordTooShortMessage = getConfig()
+                .getString("messages.password-too-short", "&cLa contraseña debe tener al menos {min} caracteres.")
+                .replace("{min}", String.valueOf(minPasswordLength));
+
         getCommand("register").setExecutor(new RegisterCommand(
                 authService,
                 getConfig().getString("messages.registration-success"),
                 getConfig().getString("messages.internal-error"),
                 getConfig().getString("messages.already-authenticated"),
-                getConfig().getString("messages.input-console-command-error")));
+                getConfig().getString("messages.input-console-command-error"),
+                passwordTooShortMessage,
+                minPasswordLength));
 
         getCommand("login").setExecutor(new LoginCommand(
                 authService,

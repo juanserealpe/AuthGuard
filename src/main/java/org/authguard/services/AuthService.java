@@ -15,38 +15,54 @@ public class AuthService {
     private final SessionManager sessionManager;
     private final LuckPermsIntegration luckPermsIntegration;
     private final String defaultRank;
+    private final int bcryptCost;
 
     public AuthService(IUserRepository userRepository, SessionManager sessionManager,
-                       LuckPermsIntegration luckPermsIntegration, String defaultRank) {
+            LuckPermsIntegration luckPermsIntegration, String defaultRank, int bcryptCost) {
         this.userRepository = userRepository;
         this.sessionManager = sessionManager;
         this.luckPermsIntegration = luckPermsIntegration;
         this.defaultRank = defaultRank;
+        this.bcryptCost = bcryptCost;
     }
 
     public CompletableFuture<Boolean> register(UUID uuid, String username, String password) {
         return userRepository.findByUuid(uuid).thenCompose(optionalUser -> {
-            if (optionalUser.isPresent()) return CompletableFuture.completedFuture(false);
-            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
-            User newUser = new User(uuid, username, hashedPassword, defaultRank, LocalDateTime.now(), LocalDateTime.now());
+            if (optionalUser.isPresent())
+                return CompletableFuture.completedFuture(false);
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(bcryptCost));
+            User newUser = new User(uuid, username, hashedPassword, defaultRank, LocalDateTime.now(),
+                    LocalDateTime.now());
             return userRepository.save(newUser).thenApply(v -> {
                 sessionManager.authenticate(uuid);
                 luckPermsIntegration.assignRank(uuid, newUser.getRank());
                 return true;
             });
+        }).exceptionally(ex -> {
+            // Log the error for debugging
+            java.util.logging.Logger.getLogger("AuthGuard")
+                    .severe("Error during registration for UUID " + uuid + ": " + ex.getMessage());
+            throw new RuntimeException(ex);
         });
     }
 
     public CompletableFuture<Boolean> login(UUID uuid, String password) {
         return userRepository.findByUuid(uuid).thenCompose(optionalUser -> {
-            if (optionalUser.isEmpty()) return CompletableFuture.completedFuture(false);
+            if (optionalUser.isEmpty())
+                return CompletableFuture.completedFuture(false);
             User user = optionalUser.get();
-            if (!BCrypt.checkpw(password, user.getPasswordHash())) return CompletableFuture.completedFuture(false);
+            if (!BCrypt.checkpw(password, user.getPasswordHash()))
+                return CompletableFuture.completedFuture(false);
             sessionManager.authenticate(uuid);
             luckPermsIntegration.assignRank(uuid, user.getRank());
 
             return userRepository.updateLastLogin(uuid)
                     .thenApply(v -> true);
+        }).exceptionally(ex -> {
+            // Log the error for debugging
+            java.util.logging.Logger.getLogger("AuthGuard")
+                    .severe("Error during login for UUID " + uuid + ": " + ex.getMessage());
+            throw new RuntimeException(ex);
         });
     }
 

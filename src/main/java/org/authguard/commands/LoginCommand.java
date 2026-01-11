@@ -41,6 +41,11 @@ public class LoginCommand implements CommandExecutor {
             return true;
         }
 
+        if (args.length == 0) {
+            player.sendMessage(invalidPasswordMessage);
+            return true;
+        }
+
         String password = args[0];
 
         authService.login(player.getUniqueId(), password).thenAccept(success -> {

@@ -1,11 +1,11 @@
 package org.authguard.services;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionManager {
-    private final Set<UUID> authenticatedPlayers = new HashSet<>();
+    private final Set<UUID> authenticatedPlayers = ConcurrentHashMap.newKeySet();
 
     public void authenticate(UUID uuid) {
         authenticatedPlayers.add(uuid);
