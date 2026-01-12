@@ -21,7 +21,7 @@ A secure and lightweight authentication plugin for Minecraft Paper servers. Auth
 
 ## Installation
 
-1. Download the latest `AuthGuard-X.X.X.jar` from [Releases](https://github.com/YOUR-USERNAME/AuthGuard/releases)
+1. Download the latest `AuthGuard-X.X.X.jar` from [Releases](https://github.com/juanserealpe/AuthGuard/releases)
 2. Place the JAR file in your server's `plugins/` folder
 3. Restart or reload your server
 4. Configure the plugin by editing `plugins/AuthGuard/config.yml`
@@ -177,13 +177,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 If you encounter any issues or have questions:
-- Open an [Issue](https://github.com/YOUR-USERNAME/AuthGuard/issues)
+- Open an [Issue](https://github.com/juanserealpe/AuthGuard/issues)
 - Check existing issues for solutions
 - Read the documentation carefully
 
 ## Credits
 
-Developed by [TheNexoz/Juanserealpe](https://github.com/YOUR-USERNAME)
+Developed by [TheNexoz/Juanserealpe](https://github.com/juanserealpe)
 
 ## Changelog
 
